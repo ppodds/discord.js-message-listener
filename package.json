@@ -1,0 +1,66 @@
+{
+  "name": "discord.js-button-embed",
+  "version": "1.0.0",
+  "description": "A simple utility to add buttons and bind events on discord embeds.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf lib/*",
+    "format": "prettier --write src/**/*.{ts,js,json} **/__tests__/**/*.{ts,js,json}",
+    "lint": "eslint -c .eslintrc.js src/**/*.ts **/__tests__/**/*.{test,spec}.ts",
+    "lint-fix": "eslint -c .eslintrc.js src/**/*.ts **/__tests__/**/*.{test,spec}.ts --fix",
+    "test": "jest",
+    "prepare": "husky install && npm run build",
+    "prepublishOnly": "npm run lint && npm test",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "lint-staged": {
+    "*.{ts,js,cjs,mjs}": [
+      "prettier --write",
+      "eslint -c .eslintrc.js --fix"
+    ]
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ppodds/discord.js-button-embed.git"
+  },
+  "keywords": [
+    "Discord",
+    "Buttons",
+    "Pagination",
+    "discord-buttons",
+    "paginator",
+    "discordjs",
+    "discord.js",
+    "button-event"
+  ],
+  "author": "ppodds",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ppodds/discord.js-button-embed/issues"
+  },
+  "homepage": "https://github.com/ppodds/discord.js-button-embed#readme",
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
+    "eslint": "^8.11.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "husky": "^7.0.4",
+    "jest": "^27.5.1",
+    "lint-staged": "^12.3.7",
+    "prettier": "^2.6.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "discord.js": "^13.6.0"
+  }
+}
