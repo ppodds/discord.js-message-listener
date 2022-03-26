@@ -6,6 +6,8 @@ import {
     Message,
     MessageComponentCollectorOptions,
     MessageComponentInteraction,
+    MessageEditOptions,
+    MessagePayload,
 } from "discord.js";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { ListenerError } from "./ListenerError";
@@ -92,4 +94,10 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
      * Subclasses should override this method to start the collector, and emit the ready event.
      */
     public abstract start(): Promise<void>;
+
+    public async editMessage(
+        options: string | MessagePayload | MessageEditOptions
+    ): Promise<Message> {
+        return await this._message.edit(options);
+    }
 }
