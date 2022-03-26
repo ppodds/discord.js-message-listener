@@ -31,6 +31,7 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     private _collector:
         | InteractionCollector<MessageComponentInteraction<CacheType>>
         | undefined;
+    private _started = false;
 
     constructor(message: Message, options: BaseMessageListenerOptions) {
         super();
@@ -90,10 +91,21 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     }
 
     /**
-     * Start collecting interactions.
-     * Subclasses should override this method to start the collector, and emit the ready event.
+     * Task to be performed before the listener is ready.
+     * Subclasses should override this method to start the collector.
      */
-    public abstract start(): Promise<void>;
+    protected abstract prestart(): Promise<void>;
+
+    /**
+     * Start the listener.
+     * It would perform prestart() and then start the collector.
+     */
+    public async start(): Promise<void> {
+        if (this._started) throw new Error("Listener has already started");
+        await this.prestart();
+        this._started = true;
+        this.emit("ready");
+    }
 
     public async editMessage(
         options: string | MessagePayload | MessageEditOptions

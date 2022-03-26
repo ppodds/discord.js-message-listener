@@ -68,12 +68,11 @@ export class ActionRowMessageListener extends BaseMessageListener {
         await (arg as MessageComponentInteraction).deferUpdate();
     }
 
-    public override async start() {
+    protected override async prestart(): Promise<void> {
         if (!this.message.editable) throw new Error("Message must be editable");
         await this.message.edit({
             components: (this.options as ActionRowMessageListenerOptions)
                 .messageActionRows,
         });
-        this.emit("ready");
     }
 }
