@@ -53,10 +53,6 @@ export class ActionRowMessageListener extends BaseMessageListener {
                 }
             });
         });
-        if (!this.message.editable) throw new Error("Message must be editable");
-        this.message
-            .edit({ components: options.messageActionRows })
-            .then(() => this.emit("ready"));
     }
 
     protected override createCollector(): InteractionCollector<
@@ -70,5 +66,14 @@ export class ActionRowMessageListener extends BaseMessageListener {
     protected override async collect(arg: Interaction): Promise<void> {
         super.collect(arg);
         await (arg as MessageComponentInteraction).deferUpdate();
+    }
+
+    public override async start() {
+        if (!this.message.editable) throw new Error("Message must be editable");
+        await this.message.edit({
+            components: (this.options as ActionRowMessageListenerOptions)
+                .messageActionRows,
+        });
+        this.emit("ready");
     }
 }

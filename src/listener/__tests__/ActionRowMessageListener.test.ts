@@ -57,10 +57,15 @@ describe("ActionRowMessageListener test", () => {
         const listener = new ActionRowMessageListener(message, {
             messageActionRows,
         });
-        await new Promise<void>((resolve) => listener.once("ready", resolve));
-        expect(message.edit).toBeCalledWith({
-            components: messageActionRows,
-        });
+        const task = new Promise<void>((resolve) =>
+            listener.once("ready", () => {
+                expect(message.edit).toBeCalledWith({
+                    components: messageActionRows,
+                });
+                resolve();
+            })
+        );
+        await Promise.all([listener.start(), task]);
     });
     test("Handle collect", async () => {
         const messageActionRow = new MessageActionRow();

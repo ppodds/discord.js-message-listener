@@ -86,4 +86,10 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
         this.emit("end", collected, reason);
         this.removeAllListeners();
     }
+
+    /**
+     * Start collecting interactions.
+     * Subclasses should override this method to start the collector, and emit the ready event.
+     */
+    public abstract start(): Promise<void>;
 }
