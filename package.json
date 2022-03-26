@@ -1,7 +1,7 @@
 {
-  "name": "discord.js-button-embed",
+  "name": "discord.js-message-listener",
   "version": "1.0.0",
-  "description": "A simple utility to add buttons and bind events on discord embeds.",
+  "description": "A simple utility to bind events on discord message.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -34,12 +34,11 @@
   "keywords": [
     "Discord",
     "Buttons",
-    "Pagination",
-    "discord-buttons",
-    "paginator",
     "discordjs",
     "discord.js",
-    "button-event"
+    "event",
+    "button-event",
+    "select-menu-event"
   ],
   "author": "ppodds",
   "license": "MIT",
