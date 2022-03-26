@@ -1,10 +1,11 @@
 # discord.js-message-listener
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9adb733cddfe4b8cad2514b29b026ce4)](https://www.codacy.com/gh/ppodds/discord.js-message-listener/dashboard?utm_source=github.com&utm_medium=referral&utm_content=ppodds/discord.js-message-listener&utm_campaign=Badge_Grade)
-![](https://img.shields.io/github/issues/ppodds/discord.js-message-listener)
-![](https://img.shields.io/github/forks/ppodds/discord.js-message-listener)
-![](https://img.shields.io/github/stars/ppodds/discord.js-message-listener)
-![](https://img.shields.io/github/license/ppodds/discord.js-message-listener)
+[![codecov](https://codecov.io/gh/ppodds/discord.js-message-listener/branch/master/graph/badge.svg?token=3SGYXUG3JB)](https://codecov.io/gh/ppodds/discord.js-message-listener)
+![Issue Badge](https://img.shields.io/github/issues/ppodds/discord.js-message-listener)
+![Forks Badge](https://img.shields.io/github/forks/ppodds/discord.js-message-listener)
+![Stars Badge](https://img.shields.io/github/stars/ppodds/discord.js-message-listener)
+![License Badge](https://img.shields.io/github/license/ppodds/discord.js-message-listener)
 
 A simple utility to bind events on discord message. Built on discord.js^13.6.0.
 
