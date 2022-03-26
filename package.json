@@ -6,6 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "npm run clean && tsc",
+    "dev": "npm run clean && tsc --watch",
     "clean": "rimraf lib/*",
     "format": "prettier --write src/**/*.{ts,js,json} **/__tests__/**/*.{ts,js,json}",
     "lint": "eslint -c .eslintrc.js src/**/*.ts **/__tests__/**/*.{test,spec}.ts",
