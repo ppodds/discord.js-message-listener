@@ -112,4 +112,14 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     ): Promise<Message> {
         return await this._message.edit(options);
     }
+
+    public stop(reason = "listener was stopped"): void {
+        if (!this._collector?.ended) this._collector?.stop(reason);
+        this.removeAllListeners();
+    }
+    public get collector():
+        | InteractionCollector<MessageComponentInteraction<CacheType>>
+        | undefined {
+        return this._collector;
+    }
 }
