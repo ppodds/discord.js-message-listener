@@ -22,6 +22,12 @@ You can use this library to listen message interaction, and react to it. For exa
 - With simple utility
   - Paginator
 
+## Installation
+
+```shell
+npm i discord.js-message-listener
+```
+
 ## Example
 
 Examples can be found in [example bot](https://github.com/ppodds/discord.js-message-listener/blob/master/example/index.ts).
