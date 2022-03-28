@@ -49,6 +49,10 @@ await listener.start(); // it would perform some required action
 
 #### ActionRowMessageListener
 
+```typescript
+import { ActionRowMessageListener } from "discord.js-message-listener";
+```
+
 ActionRowMessageListener provide a simple way to create action rows and listen to them.
 To use it, you need to pass a message, and a list of action row to it. It will edit the message to show the action row and listen to it.
 
@@ -76,7 +80,13 @@ listener.on(
 
 #### Paginator
 
+```typescript
+import { Paginator } from "discord.js-message-listener";
+```
+
 Paginator provide a simple way to create paginator. It need a message listener to listen to the message. The other thing you need to do is to pass filter functions to it. Because the paginator accept any listener, you can use it flexibly.
+
+> The paginator will bind `collect` event to the listener for you, so you don't need to do it manually.
 
 ```typescript
 const messageActionRow = new MessageActionRow();
@@ -107,4 +117,25 @@ const paginator = new Paginator(listener, {
 // you should call start() to start the paginator
 // start() will call listener.start() for you
 await paginator.start();
+```
+
+You can also bind error handler and end handler to the paginator.
+
+> Error handler and end handler will be bind to the listener.
+
+```typescript
+const paginator = new Paginator(listener, {
+  pages,
+  nextPageFilter: (arg) => (arg as ButtonInteraction).customId === "next-btn",
+  previousPageFilter: (arg) =>
+    (arg as ButtonInteraction).customId === "prev-btn",
+  errorHandler: (error) => {
+    // to something
+    console.log(error);
+  },
+  endHandler: (collected, reason) => {
+    // to something
+    console.log(reason);
+  },
+});
 ```
