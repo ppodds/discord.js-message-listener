@@ -28,9 +28,9 @@ export interface BaseMessageListenerOptions {
 export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     private _options: BaseMessageListenerOptions;
     private _message: Message;
-    private _collector:
-        | InteractionCollector<MessageComponentInteraction<CacheType>>
-        | undefined;
+    private _collector: InteractionCollector<
+        MessageComponentInteraction<CacheType>
+    >;
     private _started = false;
 
     constructor(message: Message, options: BaseMessageListenerOptions) {
@@ -38,8 +38,8 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
         this._options = options;
         this._message = message;
         this._collector = this.createCollector();
-        this._collector?.on("collect", this.handleCollect.bind(this));
-        this._collector?.on("end", this._handleCollectEnd.bind(this));
+        this._collector.on("collect", this.handleCollect.bind(this));
+        this._collector.on("end", this._handleCollectEnd.bind(this));
     }
 
     protected get message(): Message {
@@ -114,12 +114,12 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     }
 
     public stop(reason = "listener was stopped"): void {
-        if (!this._collector?.ended) this._collector?.stop(reason);
+        if (!this._collector.ended) this._collector.stop(reason);
         this.removeAllListeners();
     }
-    public get collector():
-        | InteractionCollector<MessageComponentInteraction<CacheType>>
-        | undefined {
+    public get collector(): InteractionCollector<
+        MessageComponentInteraction<CacheType>
+    > {
         return this._collector;
     }
 }
