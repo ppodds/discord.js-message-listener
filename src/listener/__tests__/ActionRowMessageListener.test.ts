@@ -1,32 +1,14 @@
 import {
     ButtonInteraction,
-    CacheType,
-    InteractionCollector,
     Message,
     MessageActionRow,
     MessageButton,
-    MessageComponentInteraction,
     MessageSelectMenu,
 } from "discord.js";
 import { ActionRowMessageListener } from "../ActionRowMessageListener";
+import { message } from "../../__mocks__/Message";
 
 describe("ActionRowMessageListener test", () => {
-    const message = {
-        createMessageComponentCollector: jest.fn().mockImplementation(() => {
-            return {
-                ended: false,
-                on: jest.fn(),
-                once: jest.fn(),
-                stop: jest.fn(),
-            } as unknown as InteractionCollector<
-                MessageComponentInteraction<CacheType>
-            >;
-        }),
-        edit: jest.fn().mockImplementation(() => Promise.resolve()),
-        editable: true,
-        components: [],
-    } as unknown as Message;
-
     beforeEach(() => jest.clearAllMocks());
 
     describe("Basic test", () => {
@@ -89,25 +71,17 @@ describe("ActionRowMessageListener test", () => {
             );
             await Promise.all([listener.start(), task]);
         });
-    });
-    describe("Event binding test", () => {
-        test("Should bind collect event", async () => {
+        test("Create message component with custom id", () => {
+            const messageActionRow = new MessageActionRow();
+            const btn = new MessageButton();
+            btn.customId = "test";
+            messageActionRow.addComponents([btn]);
+            const messageActionRows = [messageActionRow];
             const listener = new ActionRowMessageListener(message, {
-                messageActionRows: [],
+                messageActionRows,
             });
-            expect(listener.collector?.on).toBeCalledWith(
-                "collect",
-                expect.any(Function)
-            );
-        });
-        test("Should bind end event", async () => {
-            const listener = new ActionRowMessageListener(message, {
-                messageActionRows: [],
-            });
-            expect(listener.collector?.on).toBeCalledWith(
-                "end",
-                expect.any(Function)
-            );
+            // pass by reference so we can check by the side effect of constructor
+            expect(btn.customId).toBe("test");
         });
     });
     describe("Functional test", () => {
@@ -128,15 +102,6 @@ describe("ActionRowMessageListener test", () => {
                 });
             });
             await Promise.all([listener.handleCollect(interaction), task]);
-        });
-        test("Stop listener", async () => {
-            const listener = new ActionRowMessageListener(message, {
-                messageActionRows: [],
-            });
-            const stopReason = "foo";
-            await listener.start();
-            listener.stop(stopReason);
-            expect(listener.collector?.stop).toBeCalledWith(stopReason);
         });
     });
 });

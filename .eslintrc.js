@@ -10,4 +10,12 @@ module.exports = {
         "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "error",
     },
+    overrides: [
+        {
+            files: ["src/**/__tests__/**/*.{test,spec}.ts"],
+            rules: {
+                "@typescript-eslint/ban-ts-comment": "off",
+            },
+        },
+    ],
 };
