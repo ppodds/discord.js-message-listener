@@ -122,4 +122,10 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     > {
         return this._collector;
     }
+    public get started(): boolean {
+        return this._started;
+    }
+    public get ended(): boolean {
+        return this._collector?.ended;
+    }
 }
