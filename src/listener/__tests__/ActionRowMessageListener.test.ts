@@ -6,7 +6,7 @@ import {
     MessageSelectMenu,
 } from "discord.js";
 import { ActionRowMessageListener } from "../ActionRowMessageListener";
-import { message } from "../../__mocks__/Message";
+import { message } from "../../__mocks__/message";
 
 describe("ActionRowMessageListener test", () => {
     beforeEach(() => jest.clearAllMocks());

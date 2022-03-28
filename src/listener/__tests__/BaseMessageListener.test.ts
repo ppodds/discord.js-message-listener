@@ -1,5 +1,5 @@
 import { Collection } from "discord.js";
-import { message } from "../../__mocks__/Message";
+import { message } from "../../__mocks__/message";
 import { ActionRowMessageListener } from "../ActionRowMessageListener";
 
 describe("Test BaseMessageListener with ActionRowMessage instance", () => {
