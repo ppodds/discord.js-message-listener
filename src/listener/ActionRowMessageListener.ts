@@ -29,9 +29,7 @@ export interface ActionRowMessageListenerOptions
 export class ActionRowMessageListener extends BaseMessageListener {
     constructor(message: Message, options: ActionRowMessageListenerOptions) {
         super(message, options);
-        options.messageActionRows.forEach((messageActionRow) => {
-            if (!messageActionRow.components) return;
-
+        options.messageActionRows.forEach((messageActionRow) =>
             messageActionRow.components.forEach((component, index) => {
                 const { type, customId } = component;
                 // set default customId
@@ -51,8 +49,8 @@ export class ActionRowMessageListener extends BaseMessageListener {
                         );
                     }
                 }
-            });
-        });
+            })
+        );
     }
 
     protected override createCollector(): InteractionCollector<
