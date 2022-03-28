@@ -1,10 +1,16 @@
-import { Interaction, MessageEmbed } from "discord.js";
+import { Collection, Interaction, MessageEmbed } from "discord.js";
 import { BaseMessageListener } from "../listener/BaseMessageListener";
+import { ListenerError } from "../listener/ListenerError";
 
 export interface PaginatorOptions {
     pages: MessageEmbed[];
     nextPageFilter: (arg: Interaction) => boolean;
     previousPageFilter: (arg: Interaction) => boolean;
+    errorHandler?: (error: ListenerError) => void;
+    endHandler?: (
+        collected: Collection<string, Interaction>,
+        reason: string
+    ) => void;
 }
 
 export class Paginator {
@@ -21,6 +27,10 @@ export class Paginator {
             else if (this._options.previousPageFilter(arg))
                 await this.previousPage();
         });
+        if (this._options.errorHandler)
+            this._listener.on("collectError", this._options.errorHandler);
+        if (this._options.endHandler)
+            this._listener.on("end", this._options.endHandler);
     }
     public get currentPage(): number {
         return this._currentPage;

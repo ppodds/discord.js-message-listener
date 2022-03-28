@@ -56,6 +56,27 @@ describe("Paginator test", () => {
             });
             expect(listener.on).toBeCalledWith("collect", expect.any(Function));
         });
+        test("Should bind collectError event on collector", () => {
+            const paginator = new Paginator(listener, {
+                pages,
+                nextPageFilter: () => true,
+                previousPageFilter: () => true,
+                errorHandler: () => true,
+            });
+            expect(listener.on).toBeCalledWith(
+                "collectError",
+                expect.any(Function)
+            );
+        });
+        test("Should bind end event on collector", () => {
+            const paginator = new Paginator(listener, {
+                pages,
+                nextPageFilter: () => true,
+                previousPageFilter: () => true,
+                endHandler: () => true,
+            });
+            expect(listener.on).toBeCalledWith("end", expect.any(Function));
+        });
     });
     describe("Functional test", () => {
         test("Next Page", async () => {
