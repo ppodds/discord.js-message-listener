@@ -42,6 +42,15 @@ describe("ActionRowMessageListener test", () => {
             });
             expect(message.createMessageComponentCollector).toBeCalled();
         });
+        test("Start a ActionRowMessageListener with not editable message", () => {
+            const listener = new ActionRowMessageListener(
+                { ...message, editable: false } as unknown as Message,
+                {
+                    messageActionRows: [],
+                }
+            );
+            expect(async () => await listener.start()).rejects.toThrowError();
+        });
         test("Create message component collector with arguments", () => {
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows: [],
