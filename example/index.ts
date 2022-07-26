@@ -66,6 +66,7 @@ client.on("messageCreate", async (message) => {
         listener.on("end", () => console.log("listenerEnd"));
         listener.on("collect", (arg) => console.log("collect", arg));
         listener.on("collectError", (error) => console.log(error));
+        await listener.start();
     } else if (message.content === "!paginator") {
         const msg = await message.channel.send("paginator");
         const messageActionRow = new MessageActionRow();

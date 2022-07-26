@@ -75,6 +75,7 @@ listener.on(
   // use as to cast to subclass of Interaction
   (arg) => console.log((arg as ButtonInteraction).customId)
 );
+await listener.start();
 ```
 
 ### Utility
