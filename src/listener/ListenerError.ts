@@ -1,6 +1,6 @@
 import { BaseMessageListener } from "./BaseMessageListener";
 
-export interface ListenerError {
+export interface ListenerError<K, V, F extends unknown[]> {
     error: unknown;
-    listener: BaseMessageListener;
+    listener: BaseMessageListener<K, V, F>;
 }

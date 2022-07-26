@@ -1,4 +1,4 @@
-import { Interaction, MessageEmbed } from "discord.js";
+import { Interaction, MessageEmbed, Snowflake } from "discord.js";
 import { Paginator } from "../Paginator";
 import { BaseMessageListener } from "../../listener/BaseMessageListener";
 
@@ -8,7 +8,7 @@ describe("Paginator test", () => {
         editMessage: jest.fn().mockImplementation(() => Promise.resolve()),
         handleCollect: jest.fn().mockImplementation(() => Promise.resolve()),
         start: jest.fn().mockImplementation(() => Promise.resolve()),
-    } as unknown as BaseMessageListener;
+    } as unknown as BaseMessageListener<unknown, unknown>;
     const page1 = new MessageEmbed();
     const page2 = new MessageEmbed();
     page1.setTitle("Page 1");
@@ -29,7 +29,7 @@ describe("Paginator test", () => {
         test("Paginator must has at least one page", () => {
             expect(
                 () =>
-                    new Paginator(listener as BaseMessageListener, {
+                    new Paginator(listener, {
                         pages: [],
                         nextPageFilter: () => true,
                         previousPageFilter: () => true,
@@ -117,7 +117,7 @@ describe("Paginator test", () => {
                                 cb({ id: "next" } as Interaction);
                             }
                         ),
-                } as unknown as BaseMessageListener,
+                } as unknown as BaseMessageListener<Snowflake, Interaction>,
                 {
                     pages,
                     nextPageFilter: (arg) => arg.id === "next",
@@ -140,7 +140,7 @@ describe("Paginator test", () => {
                                 cb({ id: "prev" } as Interaction);
                             }
                         ),
-                } as unknown as BaseMessageListener,
+                } as unknown as BaseMessageListener<Snowflake, Interaction>,
                 {
                     pages,
                     nextPageFilter: (arg) => arg.id === "next",

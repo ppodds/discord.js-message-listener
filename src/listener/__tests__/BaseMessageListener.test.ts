@@ -9,6 +9,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows: [],
             });
+            await listener.start();
             expect(listener.collector?.on).toBeCalledWith(
                 "collect",
                 expect.any(Function)
@@ -18,6 +19,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows: [],
             });
+            await listener.start();
             expect(listener.collector?.on).toBeCalledWith(
                 "end",
                 expect.any(Function)
@@ -29,9 +31,9 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows: [],
             });
-            expect(listener.started).toBe(false);
+            expect(listener.collector).toBeUndefined();
             await listener.start();
-            expect(listener.started).toBe(true);
+            expect(listener.collector).toBeDefined();
         });
         test("Start a started listener should throw an error", async () => {
             const listener = new ActionRowMessageListener(message, {
@@ -46,7 +48,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             });
             const task = new Promise<void>((resolve) =>
                 listener.once("ready", () => {
-                    expect(listener.started).toBe(true);
+                    expect(listener.collector).toBeDefined();
                     resolve();
                 })
             );

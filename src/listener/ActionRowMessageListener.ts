@@ -1,10 +1,12 @@
 import {
+    ButtonInteraction,
     CacheType,
-    Interaction,
     InteractionCollector,
     Message,
     MessageActionRow,
     MessageComponentInteraction,
+    SelectMenuInteraction,
+    Snowflake,
 } from "discord.js";
 import { MessageButtonStyles } from "discord.js/typings/enums";
 import {
@@ -22,11 +24,16 @@ function formatComponentType(type: "BUTTON" | "SELECT_MENU"): string {
 }
 
 export interface ActionRowMessageListenerOptions
-    extends BaseMessageListenerOptions {
+    extends BaseMessageListenerOptions<
+        [ButtonInteraction<CacheType> | SelectMenuInteraction<CacheType>]
+    > {
     messageActionRows: MessageActionRow[];
 }
 
-export class ActionRowMessageListener extends BaseMessageListener {
+export class ActionRowMessageListener extends BaseMessageListener<
+    Snowflake,
+    ButtonInteraction<CacheType> | SelectMenuInteraction<CacheType>
+> {
     constructor(message: Message, options: ActionRowMessageListenerOptions) {
         super(message, options);
         options.messageActionRows.forEach((messageActionRow) =>
@@ -54,14 +61,16 @@ export class ActionRowMessageListener extends BaseMessageListener {
     }
 
     protected override createCollector(): InteractionCollector<
-        MessageComponentInteraction<CacheType>
+        ButtonInteraction<CacheType> | SelectMenuInteraction<CacheType>
     > {
-        return this.message?.createMessageComponentCollector(
-            (this.options as ActionRowMessageListenerOptions).collectorOptions
-        );
+        return this.message.createMessageComponentCollector<
+            "BUTTON" | "SELECT_MENU"
+        >(this.options.collectorOptions);
     }
 
-    protected override async collect(arg: Interaction): Promise<void> {
+    protected override async collect(
+        arg: ButtonInteraction<CacheType> | SelectMenuInteraction<CacheType>
+    ): Promise<void> {
         super.collect(arg);
         await (arg as MessageComponentInteraction).deferUpdate();
     }

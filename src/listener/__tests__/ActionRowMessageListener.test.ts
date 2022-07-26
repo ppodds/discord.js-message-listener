@@ -18,13 +18,14 @@ describe("ActionRowMessageListener test", () => {
             });
             expect(listener).toBeInstanceOf(ActionRowMessageListener);
         });
-        test("Create message component collector", () => {
+        test("Create message component collector", async () => {
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows: [],
             });
+            await listener.start();
             expect(message.createMessageComponentCollector).toBeCalled();
         });
-        test("Start a ActionRowMessageListener with not editable message", () => {
+        test("Start a ActionRowMessageListener with not editable message", async () => {
             const listener = new ActionRowMessageListener(
                 { ...message, editable: false } as unknown as Message,
                 {
@@ -33,13 +34,14 @@ describe("ActionRowMessageListener test", () => {
             );
             expect(async () => await listener.start()).rejects.toThrowError();
         });
-        test("Create message component collector with arguments", () => {
+        test("Create message component collector with arguments", async () => {
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows: [],
                 collectorOptions: {
                     time: 10000,
                 },
             });
+            await listener.start();
             expect(message.createMessageComponentCollector).toBeCalledWith({
                 time: 10000,
             });

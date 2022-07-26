@@ -1,30 +1,31 @@
-import { Collection, Interaction, MessageEmbed } from "discord.js";
+import { Collection, MessageEmbed } from "discord.js";
 import { BaseMessageListener } from "../listener/BaseMessageListener";
 import { ListenerError } from "../listener/ListenerError";
 
-export interface PaginatorOptions {
+export interface PaginatorOptions<K, V, F extends unknown[]> {
     pages: MessageEmbed[];
-    nextPageFilter: (arg: Interaction) => boolean;
-    previousPageFilter: (arg: Interaction) => boolean;
-    errorHandler?: (error: ListenerError) => void;
-    endHandler?: (
-        collected: Collection<string, Interaction>,
-        reason: string
-    ) => void;
+    nextPageFilter: (arg0: V, ...arg1: F) => boolean;
+    previousPageFilter: (arg0: V, ...arg1: F) => boolean;
+    errorHandler?: (error: ListenerError<K, V, F>) => void;
+    endHandler?: (collected: Collection<K, V>, reason: string) => void;
 }
 
-export class Paginator {
-    private _options: PaginatorOptions;
-    private _listener: BaseMessageListener;
+export class Paginator<K, V, F extends unknown[] = []> {
+    private _options: PaginatorOptions<K, V, F>;
+    private _listener: BaseMessageListener<K, V, F>;
     private _currentPage = 0;
-    constructor(listener: BaseMessageListener, options: PaginatorOptions) {
+    constructor(
+        listener: BaseMessageListener<K, V, F>,
+        options: PaginatorOptions<K, V, F>
+    ) {
         if (options.pages.length === 0)
             throw new Error("Paginator must have at least one page.");
         this._options = options;
         this._listener = listener;
-        this._listener.on("collect", async (arg) => {
-            if (this._options.nextPageFilter(arg)) await this.nextPage();
-            else if (this._options.previousPageFilter(arg))
+        this._listener.on("collect", async (arg0, ...arg1) => {
+            if (this._options.nextPageFilter(arg0, ...arg1))
+                await this.nextPage();
+            else if (this._options.previousPageFilter(arg0, ...arg1))
                 await this.previousPage();
         });
         if (this._options.errorHandler)

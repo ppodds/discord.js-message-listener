@@ -1,52 +1,48 @@
 import {
-    CacheType,
     Collection,
-    Interaction,
-    InteractionCollector,
+    Collector,
+    CollectorOptions,
     Message,
-    MessageComponentCollectorOptions,
-    MessageComponentInteraction,
     MessageEditOptions,
     MessagePayload,
 } from "discord.js";
 import { TypedEmitter } from "tiny-typed-emitter";
 import { ListenerError } from "./ListenerError";
 
-export interface ListenerEvent {
-    collectError: (error: ListenerError) => void;
-    collect: (args: Interaction) => void;
+export interface ListenerEvent<K, V, F extends unknown[]> {
+    collectError: (error: ListenerError<K, V, F>) => void;
+    collect: (arg0: V, ...arg1: F) => void;
     ready: () => void;
-    end: (collected: Collection<string, Interaction>, reason: string) => void;
+    end: (collected: Collection<K, V>, reason: string) => void;
 }
 
-export interface BaseMessageListenerOptions {
-    collectorOptions?: MessageComponentCollectorOptions<
-        MessageComponentInteraction<CacheType>
-    >;
+export interface BaseMessageListenerOptions<T extends unknown[]> {
+    collectorOptions?: CollectorOptions<T>;
 }
 
-export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
-    private _options: BaseMessageListenerOptions;
+export abstract class BaseMessageListener<
+    K,
+    V,
+    F extends unknown[] = []
+> extends TypedEmitter<ListenerEvent<K, V, F>> {
+    private _options: BaseMessageListenerOptions<[V, ...F]>;
     private _message: Message;
-    private _collector: InteractionCollector<
-        MessageComponentInteraction<CacheType>
-    >;
-    private _started = false;
+    private _collector?: Collector<K, V, F>;
 
-    constructor(message: Message, options: BaseMessageListenerOptions) {
+    constructor(
+        message: Message,
+        options: BaseMessageListenerOptions<[V, ...F]>
+    ) {
         super();
         this._options = options;
         this._message = message;
-        this._collector = this.createCollector();
-        this._collector.on("collect", this.handleCollect.bind(this));
-        this._collector.on("end", this._handleCollectEnd.bind(this));
     }
 
     protected get message(): Message {
         return this._message;
     }
 
-    public get options(): BaseMessageListenerOptions {
+    public get options(): BaseMessageListenerOptions<[V, ...F]> {
         return this._options;
     }
 
@@ -54,9 +50,7 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
      * The method would be called in constructor.
      * Subclasses should override this method to create a collector.
      */
-    protected abstract createCollector(): InteractionCollector<
-        MessageComponentInteraction<CacheType>
-    >;
+    protected abstract createCollector(): Collector<K, V, F>;
 
     /**
      * The method that is called when the collector is started.
@@ -64,26 +58,28 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
      *
      * It can be used to perform actions after the collector collected a interaction.
      *
-     * @param arg
+     * @param arg0 data which was collected
+     * @param arg1
      */
-    protected async collect(arg: Interaction): Promise<void> {
-        this.emit("collect", arg);
+    protected async collect(arg0: V, ...arg1: F): Promise<void> {
+        this.emit("collect", arg0, ...arg1);
     }
 
     /**
-     * Call this to handle an event as a collectable element. Accepts Interaction event data as parameters.
-     * @param arg The interaction data.
+     * Call this to handle an event as a collectable element. Accepts event data as parameters.
+     * @param arg0 data which was collected
+     * @param arg1
      */
-    public async handleCollect(arg: Interaction): Promise<void> {
+    public async handleCollect(arg0: V, ...arg1: F): Promise<void> {
         try {
-            await this.collect(arg);
+            await this.collect(arg0, ...arg1);
         } catch (error) {
             this.emit("collectError", { error, listener: this });
         }
     }
 
     private async _handleCollectEnd(
-        collected: Collection<string, Interaction>,
+        collected: Collection<K, V>,
         reason: string
     ): Promise<void> {
         this.emit("end", collected, reason);
@@ -101,9 +97,15 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
      * It would perform prestart() and then start the collector.
      */
     public async start(): Promise<void> {
-        if (this._started) throw new Error("Listener has already started");
+        if (this._collector) throw new Error("Listener has already started");
         await this.prestart();
-        this._started = true;
+        this._collector = this.createCollector();
+        /* eslint-disable */
+        // @ts-ignore
+        this._collector.on("collect", this.handleCollect.bind(this));
+        // @ts-ignore
+        this._collector.on("end", this._handleCollectEnd.bind(this));
+        /* eslint-enable */
         this.emit("ready");
     }
 
@@ -114,18 +116,16 @@ export abstract class BaseMessageListener extends TypedEmitter<ListenerEvent> {
     }
 
     public stop(reason = "listener was stopped"): void {
+        if (!this._collector) throw new Error("Listener has not started");
         if (!this._collector.ended) this._collector.stop(reason);
         this.removeAllListeners();
     }
-    public get collector(): InteractionCollector<
-        MessageComponentInteraction<CacheType>
-    > {
+
+    public get collector(): Collector<K, V, F> | undefined {
         return this._collector;
     }
-    public get started(): boolean {
-        return this._started;
-    }
+
     public get ended(): boolean {
-        return this._collector?.ended;
+        return this._collector?.ended ?? false;
     }
 }

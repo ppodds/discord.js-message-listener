@@ -8,7 +8,7 @@
 ![Stars Badge](https://img.shields.io/github/stars/ppodds/discord.js-message-listener)
 ![License Badge](https://img.shields.io/github/license/ppodds/discord.js-message-listener)
 
-A simple utility to bind events on discord message. Built on discord.js^13.6.0.
+A simple utility to bind events on discord message. Built on discord.js^13.9.1.
 
 You can use this library to listen message interaction, and react to it. For example, you can do a embed message with pagination, or a selector to choose a option.
 
