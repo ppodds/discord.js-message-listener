@@ -1,4 +1,4 @@
-import { Interaction, MessageEmbed, Snowflake } from "discord.js";
+import { Interaction, EmbedBuilder, Snowflake } from "discord.js";
 import { Paginator } from "../Paginator";
 import { BaseMessageListener } from "../../listener/BaseMessageListener";
 
@@ -9,8 +9,8 @@ describe("Paginator test", () => {
         handleCollect: jest.fn().mockImplementation(() => Promise.resolve()),
         start: jest.fn().mockImplementation(() => Promise.resolve()),
     } as unknown as BaseMessageListener<unknown, unknown>;
-    const page1 = new MessageEmbed();
-    const page2 = new MessageEmbed();
+    const page1 = new EmbedBuilder();
+    const page2 = new EmbedBuilder();
     page1.setTitle("Page 1");
     page2.setTitle("Page 2");
     const pages = [page1, page2];
