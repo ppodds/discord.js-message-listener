@@ -8,7 +8,7 @@
 ![Stars Badge](https://img.shields.io/github/stars/ppodds/discord.js-message-listener)
 ![License Badge](https://img.shields.io/github/license/ppodds/discord.js-message-listener)
 
-A simple utility to bind events on discord message. Built on discord.js^13.9.1.
+A simple utility to bind events on discord message.
 
 You can use this library to listen message interaction, and react to it. For example, you can do a embed message with pagination, or a selector to choose a option.
 
@@ -26,6 +26,9 @@ You can use this library to listen message interaction, and react to it. For exa
 ## Installation
 
 ```shell
+# if you are using discord.js v13
+npm i discord.js-message-listener@^2.0.0
+# v14
 npm i discord.js-message-listener
 ```
 
@@ -58,12 +61,12 @@ ActionRowMessageListener provide a simple way to create action rows and listen t
 To use it, you need to pass a message, and a list of action row to it. It will edit the message to show the action row and listen to it.
 
 ```typescript
-const messageActionRow = new MessageActionRow();
-const btn1 = new MessageButton();
-const btn2 = new MessageButton();
+const messageActionRow = new ActionRowBuilder();
+const btn1 = new ButtonBuilder();
+const btn2 = new ButtonBuilder();
 btn1.setLabel("1");
 btn2.setLabel("2");
-messageActionRow.addComponents([btn1, btn2]);
+messageActionRow.addComponents(btn1, btn2);
 const listener = new ActionRowMessageListener(message, {
   messageActionRows: [messageActionRow],
   collectorOptions: {
@@ -91,22 +94,22 @@ Paginator provide a simple way to create paginator. It need a message listener t
 > The paginator will bind `collect` event to the listener for you, so you don't need to do it manually.
 
 ```typescript
-const messageActionRow = new MessageActionRow();
-const prevPage = new MessageButton();
-const nextPage = new MessageButton();
+const messageActionRow = new ActionRowBuilder();
+const prevPage = new ButtonBuilder();
+const nextPage = new ButtonBuilder();
 prevPage.setLabel("Prev");
 prevPage.setCustomId("prev-btn");
 nextPage.setLabel("Next");
 nextPage.setCustomId("next-btn");
-messageActionRow.addComponents([prevPage, nextPage]);
+messageActionRow.addComponents(prevPage, nextPage);
 const listener = new ActionRowMessageListener(msg, {
   messageActionRows: [messageActionRow],
   collectorOptions: {
     time: 60000,
   },
 });
-const page1 = new MessageEmbed();
-const page2 = new MessageEmbed();
+const page1 = new EmbedBuilder();
+const page2 = new EmbedBuilder();
 page1.setTitle("Page 1");
 page2.setTitle("Page 2");
 const pages = [page1, page2];
