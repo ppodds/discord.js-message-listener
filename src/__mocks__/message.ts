@@ -1,8 +1,8 @@
 import {
-    CacheType,
+    ButtonInteraction,
     InteractionCollector,
     Message,
-    MessageComponentInteraction,
+    SelectMenuInteraction,
 } from "discord.js";
 
 export const message = {
@@ -15,13 +15,13 @@ export const message = {
                 .fn()
                 .mockImplementation(function (
                     this: InteractionCollector<
-                        MessageComponentInteraction<CacheType>
+                        ButtonInteraction | SelectMenuInteraction
                     >
                 ) {
                     this.ended = true;
                 }),
         } as unknown as InteractionCollector<
-            MessageComponentInteraction<CacheType>
+            ButtonInteraction | SelectMenuInteraction
         >;
     }),
     edit: jest.fn().mockImplementation(() => Promise.resolve()),

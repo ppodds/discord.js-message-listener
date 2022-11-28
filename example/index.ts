@@ -1,36 +1,39 @@
 import {
+    ActionRowBuilder,
+    ButtonBuilder,
     ButtonInteraction,
+    ButtonStyle,
     Client,
-    Intents,
-    MessageActionRow,
-    MessageButton,
-    MessageEmbed,
-    MessageSelectMenu,
+    EmbedBuilder,
+    IntentsBitField,
+    Partials,
+    SelectMenuBuilder,
+    SelectMenuOptionBuilder,
 } from "discord.js";
-import { MessageButtonStyles } from "discord.js/typings/enums";
 import { ActionRowMessageListener, Paginator } from "../lib/index";
 import { token } from "./env";
 
 const client = new Client({
     // IMPORTANT: you should set it or your bot can't get the information of Discord
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS,
-        Intents.FLAGS.GUILD_INTEGRATIONS,
-        Intents.FLAGS.GUILD_WEBHOOKS,
-        Intents.FLAGS.GUILD_INVITES,
-        Intents.FLAGS.GUILD_VOICE_STATES,
-        Intents.FLAGS.GUILD_PRESENCES,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-        Intents.FLAGS.GUILD_MESSAGE_TYPING,
-        Intents.FLAGS.DIRECT_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGE_REACTIONS,
-        Intents.FLAGS.DIRECT_MESSAGE_TYPING,
+        IntentsBitField.Flags.Guilds,
+        IntentsBitField.Flags.GuildMembers,
+        IntentsBitField.Flags.GuildEmojisAndStickers,
+        IntentsBitField.Flags.GuildIntegrations,
+        IntentsBitField.Flags.GuildWebhooks,
+        IntentsBitField.Flags.GuildInvites,
+        IntentsBitField.Flags.GuildVoiceStates,
+        IntentsBitField.Flags.GuildPresences,
+        IntentsBitField.Flags.GuildMessages,
+        IntentsBitField.Flags.GuildMessageReactions,
+        IntentsBitField.Flags.GuildMessageTyping,
+        IntentsBitField.Flags.DirectMessages,
+        IntentsBitField.Flags.DirectMessageReactions,
+        IntentsBitField.Flags.DirectMessageTyping,
+        IntentsBitField.Flags.MessageContent,
     ],
     // if you CHANNEL not enable, you can't get any event in dm channel
-    partials: ["CHANNEL"],
+    partials: [Partials.Channel],
 });
 
 client.on("ready", () => {
@@ -42,21 +45,24 @@ client.on("ready", () => {
 client.on("messageCreate", async (message) => {
     if (message.content === "!test") {
         const msg = await message.channel.send("test");
-        const messageActionRow1 = new MessageActionRow();
-        const btn1 = new MessageButton();
-        const btn2 = new MessageButton();
-        const btn3 = new MessageButton();
+        const messageActionRow1 = new ActionRowBuilder();
+        const btn1 = new ButtonBuilder();
+        const btn2 = new ButtonBuilder();
+        const btn3 = new ButtonBuilder();
         btn1.setLabel("1");
         btn2.setLabel("2");
         btn2.setURL("https://www.google.com");
         btn3.setLabel("3");
-        btn3.setStyle(MessageButtonStyles.SUCCESS);
-        const messageActionRow2 = new MessageActionRow();
-        const selectMenu = new MessageSelectMenu();
-        selectMenu.addOptions({ label: "a", value: "a" });
-        selectMenu.addOptions({ label: "b", value: "b" });
-        messageActionRow1.addComponents([btn1, btn2, btn3]);
-        messageActionRow2.addComponents([selectMenu]);
+        btn3.setStyle(ButtonStyle.Success);
+        const messageActionRow2 = new ActionRowBuilder();
+        const selectMenu = new SelectMenuBuilder();
+        const option1 = new SelectMenuOptionBuilder();
+        const option2 = new SelectMenuOptionBuilder();
+        option1.setLabel("a").setValue("a");
+        option2.setLabel("b").setValue("b");
+        selectMenu.addOptions(option1, option2);
+        messageActionRow1.addComponents(btn1, btn2, btn3);
+        messageActionRow2.addComponents(selectMenu);
         const listener = new ActionRowMessageListener(msg, {
             messageActionRows: [messageActionRow1, messageActionRow2],
             collectorOptions: {
@@ -69,9 +75,9 @@ client.on("messageCreate", async (message) => {
         await listener.start();
     } else if (message.content === "!paginator") {
         const msg = await message.channel.send("paginator");
-        const messageActionRow = new MessageActionRow();
-        const prevPage = new MessageButton();
-        const nextPage = new MessageButton();
+        const messageActionRow = new ActionRowBuilder();
+        const prevPage = new ButtonBuilder();
+        const nextPage = new ButtonBuilder();
         prevPage.setLabel("Prev");
         prevPage.setCustomId("prev-btn");
         nextPage.setLabel("Next");
@@ -83,8 +89,8 @@ client.on("messageCreate", async (message) => {
                 time: 60000,
             },
         });
-        const page1 = new MessageEmbed();
-        const page2 = new MessageEmbed();
+        const page1 = new EmbedBuilder();
+        const page2 = new EmbedBuilder();
         page1.setTitle("Page 1");
         page2.setTitle("Page 2");
         const pages = [page1, page2];

@@ -1,9 +1,9 @@
-import { Collection, MessageEmbed } from "discord.js";
+import { Collection, EmbedBuilder } from "discord.js";
 import { BaseMessageListener } from "../listener/BaseMessageListener";
 import { ListenerError } from "../listener/ListenerError";
 
 export interface PaginatorOptions<K, V, F extends unknown[]> {
-    pages: MessageEmbed[];
+    pages: EmbedBuilder[];
     nextPageFilter: (arg0: V, ...arg1: F) => boolean;
     previousPageFilter: (arg0: V, ...arg1: F) => boolean;
     errorHandler?: (error: ListenerError<K, V, F>) => void;

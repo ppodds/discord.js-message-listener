@@ -1,9 +1,9 @@
 import {
     ButtonInteraction,
     Message,
-    MessageActionRow,
-    MessageButton,
-    MessageSelectMenu,
+    ActionRowBuilder,
+    ButtonBuilder,
+    SelectMenuBuilder,
 } from "discord.js";
 import { ActionRowMessageListener } from "../ActionRowMessageListener";
 import { message } from "../../__mocks__/message";
@@ -47,12 +47,12 @@ describe("ActionRowMessageListener test", () => {
             });
         });
         test("Edit message to create message component", async () => {
-            const messageActionRow1 = new MessageActionRow();
-            const messageActionRow2 = new MessageActionRow();
-            const btn1 = new MessageButton();
-            const btn2 = new MessageButton();
+            const messageActionRow1 = new ActionRowBuilder();
+            const messageActionRow2 = new ActionRowBuilder();
+            const btn1 = new ButtonBuilder();
+            const btn2 = new ButtonBuilder();
             btn2.setURL("https://www.google.com");
-            const selectMenu = new MessageSelectMenu();
+            const selectMenu = new SelectMenuBuilder();
             const option1 = { label: "a", value: "a" };
             const option2 = { label: "b", value: "b" };
             selectMenu.addOptions(option1);
@@ -74,22 +74,22 @@ describe("ActionRowMessageListener test", () => {
             await Promise.all([listener.start(), task]);
         });
         test("Create message component with custom id", () => {
-            const messageActionRow = new MessageActionRow();
-            const btn = new MessageButton();
-            btn.customId = "test";
+            const messageActionRow = new ActionRowBuilder();
+            const btn = new ButtonBuilder();
+            btn.setCustomId("test");
             messageActionRow.addComponents([btn]);
             const messageActionRows = [messageActionRow];
             const listener = new ActionRowMessageListener(message, {
                 messageActionRows,
             });
             // pass by reference so we can check by the side effect of constructor
-            expect(btn.customId).toBe("test");
+            expect((btn.data as { custom_id?: string }).custom_id).toBe("test");
         });
     });
     describe("Functional test", () => {
         test("Handle collect", async () => {
-            const messageActionRow = new MessageActionRow();
-            const btn = new MessageButton();
+            const messageActionRow = new ActionRowBuilder();
+            const btn = new ButtonBuilder();
             messageActionRow.addComponents([btn]);
             const messageActionRows = [messageActionRow];
             const listener = new ActionRowMessageListener(message, {
