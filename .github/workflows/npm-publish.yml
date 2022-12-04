@@ -5,9 +5,18 @@ name: Node.js Package
 
 on:
   release:
-    types: [created]
+    types: [created, edited]
 
 jobs:
+  release-note:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: ppodds/release-note@v0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
   publish-npm:
     runs-on: ubuntu-latest
     steps:
