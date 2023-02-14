@@ -1,6 +1,6 @@
 {
   "name": "discord.js-message-listener",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A simple utility to bind events on discord message.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
