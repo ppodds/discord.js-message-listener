@@ -16,7 +16,7 @@ export class Paginator<K, V, F extends unknown[] = []> {
     private _currentPage = 0;
     constructor(
         listener: BaseMessageListener<K, V, F>,
-        options: PaginatorOptions<K, V, F>
+        options: PaginatorOptions<K, V, F>,
     ) {
         if (options.pages.length === 0)
             throw new Error("Paginator must have at least one page.");

@@ -23,7 +23,7 @@ export interface BaseMessageListenerOptions<T extends unknown[]> {
 export abstract class BaseMessageListener<
     K,
     V,
-    F extends unknown[] = []
+    F extends unknown[] = [],
 > extends TypedEmitter<ListenerEvent<K, V, F>> {
     private _options: BaseMessageListenerOptions<[V, ...F]>;
     private _message: Message;
@@ -31,7 +31,7 @@ export abstract class BaseMessageListener<
 
     constructor(
         message: Message,
-        options: BaseMessageListenerOptions<[V, ...F]>
+        options: BaseMessageListenerOptions<[V, ...F]>,
     ) {
         super();
         this._options = options;
@@ -80,7 +80,7 @@ export abstract class BaseMessageListener<
 
     private async _handleCollectEnd(
         collected: Collection<K, V>,
-        reason: string
+        reason: string,
     ): Promise<void> {
         this.emit("end", collected, reason);
         this.removeAllListeners();
@@ -110,7 +110,7 @@ export abstract class BaseMessageListener<
     }
 
     public async editMessage(
-        options: string | MessagePayload | MessageEditOptions
+        options: string | MessagePayload | MessageEditOptions,
     ): Promise<Message> {
         return await this._message.edit(options);
     }

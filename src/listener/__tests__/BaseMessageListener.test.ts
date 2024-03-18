@@ -12,7 +12,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             await listener.start();
             expect(listener.collector?.on).toBeCalledWith(
                 "collect",
-                expect.any(Function)
+                expect.any(Function),
             );
         });
         test("Should bind end event", async () => {
@@ -22,7 +22,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             await listener.start();
             expect(listener.collector?.on).toBeCalledWith(
                 "end",
-                expect.any(Function)
+                expect.any(Function),
             );
         });
     });
@@ -50,7 +50,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
                 listener.once("ready", () => {
                     expect(listener.collector).toBeDefined();
                     resolve();
-                })
+                }),
             );
             await Promise.all([listener.start(), task]);
         });
@@ -72,7 +72,7 @@ describe("Test BaseMessageListener with ActionRowMessage instance", () => {
             await listener.start();
             listener.stop();
             expect(listener.collector?.stop).toBeCalledWith(
-                "listener was stopped"
+                "listener was stopped",
             );
         });
         test("Handle collect end event", async () => {

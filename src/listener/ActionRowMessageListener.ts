@@ -50,7 +50,7 @@ export class ActionRowMessageListener extends BaseMessageListener<
                                           custom_id: string;
                                       }
                                   ).custom_id
-                                : `button-${index}`
+                                : `button-${index}`,
                         );
 
                     // Set style to default if not specified
@@ -58,7 +58,7 @@ export class ActionRowMessageListener extends BaseMessageListener<
                         button.setStyle(
                             (button.data as unknown as { url?: string }).url
                                 ? ButtonStyle.Link
-                                : ButtonStyle.Primary
+                                : ButtonStyle.Primary,
                         );
                 } else {
                     const selectMenu = component as SelectMenuBuilder;
@@ -75,7 +75,7 @@ export class ActionRowMessageListener extends BaseMessageListener<
                                       custom_id: string;
                                   }
                               ).custom_id
-                            : `select-menu-${index}`
+                            : `select-menu-${index}`,
                     );
                 }
             });
@@ -94,7 +94,7 @@ export class ActionRowMessageListener extends BaseMessageListener<
     }
 
     protected override async collect(
-        arg: ButtonInteraction<CacheType> | SelectMenuInteraction<CacheType>
+        arg: ButtonInteraction<CacheType> | SelectMenuInteraction<CacheType>,
     ): Promise<void> {
         super.collect(arg);
         await (arg as MessageComponentInteraction).deferUpdate();

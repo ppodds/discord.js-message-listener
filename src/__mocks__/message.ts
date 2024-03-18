@@ -11,15 +11,13 @@ export const message = {
             ended: false,
             on: jest.fn(),
             once: jest.fn(),
-            stop: jest
-                .fn()
-                .mockImplementation(function (
-                    this: InteractionCollector<
-                        ButtonInteraction | SelectMenuInteraction
-                    >
-                ) {
-                    this.ended = true;
-                }),
+            stop: jest.fn().mockImplementation(function (
+                this: InteractionCollector<
+                    ButtonInteraction | SelectMenuInteraction
+                >,
+            ) {
+                this.ended = true;
+            }),
         } as unknown as InteractionCollector<
             ButtonInteraction | SelectMenuInteraction
         >;

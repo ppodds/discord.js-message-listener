@@ -30,7 +30,7 @@ describe("ActionRowMessageListener test", () => {
                 { ...message, editable: false } as unknown as Message,
                 {
                     messageActionRows: [],
-                }
+                },
             );
             expect(async () => await listener.start()).rejects.toThrowError();
         });
@@ -69,7 +69,7 @@ describe("ActionRowMessageListener test", () => {
                         components: messageActionRows,
                     });
                     resolve();
-                })
+                }),
             );
             await Promise.all([listener.start(), task]);
         });

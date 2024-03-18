@@ -33,7 +33,7 @@ describe("Paginator test", () => {
                         pages: [],
                         nextPageFilter: () => true,
                         previousPageFilter: () => true,
-                    })
+                    }),
             ).toThrowError();
         });
         test("Start paginator", async () => {
@@ -65,7 +65,7 @@ describe("Paginator test", () => {
             });
             expect(listener.on).toBeCalledWith(
                 "collectError",
-                expect.any(Function)
+                expect.any(Function),
             );
         });
         test("Should bind end event on collector", () => {
@@ -112,17 +112,17 @@ describe("Paginator test", () => {
                         .mockImplementation(
                             (
                                 event: string,
-                                cb: (arg: Interaction) => Promise<void>
+                                cb: (arg: Interaction) => Promise<void>,
                             ) => {
                                 cb({ id: "next" } as Interaction);
-                            }
+                            },
                         ),
                 } as unknown as BaseMessageListener<Snowflake, Interaction>,
                 {
                     pages,
                     nextPageFilter: (arg) => arg.id === "next",
                     previousPageFilter: (arg) => arg.id === "prev",
-                }
+                },
             );
             expect(paginator.currentPage).toBe(1);
         });
@@ -135,17 +135,17 @@ describe("Paginator test", () => {
                         .mockImplementation(
                             (
                                 event: string,
-                                cb: (arg: Interaction) => Promise<void>
+                                cb: (arg: Interaction) => Promise<void>,
                             ) => {
                                 cb({ id: "prev" } as Interaction);
-                            }
+                            },
                         ),
                 } as unknown as BaseMessageListener<Snowflake, Interaction>,
                 {
                     pages,
                     nextPageFilter: (arg) => arg.id === "next",
                     previousPageFilter: (arg) => arg.id === "prev",
-                }
+                },
             );
             expect(paginator.currentPage).toBe(1);
         });
